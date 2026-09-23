@@ -10,6 +10,17 @@ describe('once', () => {
     expect(count).toBe(1);
   });
 
+  it('should preserve the `this` context', () => {
+    const object = {
+      value: 42,
+      getValue: once(function (this: { value: number }) {
+        return this.value;
+      }),
+    };
+
+    expect(object.getValue()).toBe(42);
+  });
+
   it('should ignore recursive calls', () => {
     let count = 0;
 
