@@ -16,6 +16,7 @@ Released on June 26th, 2026.
   floating-point options. ([#1767])
 - Fixed `compat/chunk` to handle `NaN` and `Infinity` size values consistently
   with Lodash. ([#1797])
+- Fixed `maxBy` and `minBy` to compare string iteratee values correctly.
 - Improved documentation and JSDoc accuracy across array, function, and compat
   references. ([#1785], [#1786], [#1788], [#1790], [#1791], [#1792], [#1793],
   [#1795], [#1800])

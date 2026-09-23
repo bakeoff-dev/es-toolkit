@@ -4,7 +4,7 @@
  *
  * @template T - The type of elements in the array.
  * @param items The nonempty array of elements to search.
- * @param getValue A function that selects a numeric value from each element.
+ * @param getValue A function that selects a number or string value from each element.
  * @returns The element with the maximum value as determined by the `getValue` function.
  * @example
  * maxBy([{ a: 1 }, { a: 2 }, { a: 3 }], x => x.a); // Returns: { a: 3 }
@@ -21,7 +21,7 @@
  */
 export function maxBy<T>(
   items: readonly [T, ...T[]],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => number | string
 ): T;
 /**
  * Finds the element in an array that has the maximum value when applying
@@ -29,7 +29,7 @@ export function maxBy<T>(
  *
  * @template T - The type of elements in the array.
  * @param items The array of elements to search.
- * @param getValue A function that selects a numeric value from each element.
+ * @param getValue A function that selects a number or string value from each element.
  * @returns The element with the maximum value as determined by the `getValue` function,
  * or `undefined` if the array is empty.
  * @example
@@ -47,7 +47,7 @@ export function maxBy<T>(
  */
 export function maxBy<T>(
   items: readonly T[],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => number | string
 ): T | undefined;
 /**
  * Finds the element in an array that has the maximum value when applying
@@ -55,7 +55,7 @@ export function maxBy<T>(
  *
  * @template T - The type of elements in the array.
  * @param items The array of elements to search.
- * @param getValue A function that selects a numeric value from each element.
+ * @param getValue A function that selects a number or string value from each element.
  * @returns The element with the maximum value as determined by the `getValue` function,
  * or `undefined` if the array is empty.
  * @example
@@ -73,16 +73,20 @@ export function maxBy<T>(
  */
 export function maxBy<T>(
   items: readonly T[],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => number | string
 ): T | undefined {
   if (items.length === 0) {
     return undefined;
   }
 
   let maxElement = items[0];
-  let max = -Infinity;
+  let max = getValue(maxElement, 0, items);
 
-  for (let i = 0; i < items.length; i++) {
+  if (Number.isNaN(max)) {
+    return maxElement;
+  }
+
+  for (let i = 1; i < items.length; i++) {
     const element = items[i];
     const value = getValue(element, i, items);
 

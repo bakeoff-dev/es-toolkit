@@ -41,6 +41,11 @@ describe('maxBy', () => {
     expect(maxBy([1, 3, 2, Number.NaN], x => x)).toBeNaN();
   });
 
+  it('should compare string values', () => {
+    const items = [{ value: 'a' }, { value: 'b' }];
+    expect(maxBy(items, item => item.value)).toBe(items[1]);
+  });
+
   it('should provide index parameter to getValue function', () => {
     const items = [{ value: 10 }, { value: 20 }, { value: 15 }];
     const result = maxBy(items, (item, index) => item.value + index);

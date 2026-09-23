@@ -9,6 +9,11 @@ describe('minBy', () => {
     expect(minBy([curr, past], date => date.getTime())).toBe(past);
   });
 
+  it('should compare string values', () => {
+    const objects = [{ v: 'b' }, { v: 'a' }];
+    expect(minBy(objects, object => object.v)).toBe(objects[1]);
+  });
+
   it('should work with extremely large arrays', () => {
     const array = Array.from({ length: 5e5 }, (_, i) => i);
     expect(minBy(array, x => x)).toBe(0);

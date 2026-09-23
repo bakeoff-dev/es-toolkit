@@ -9,6 +9,11 @@ describe('maxBy', () => {
     expect(maxBy([curr, past], date => date.getTime())).toBe(curr);
   });
 
+  it('should compare string values', () => {
+    const objects = [{ v: 'a' }, { v: 'b' }];
+    expect(maxBy(objects, object => object.v)).toBe(objects[1]);
+  });
+
   it('should work with extremely large arrays', () => {
     const array = Array.from({ length: 5e5 }, (_, i) => i);
     expect(maxBy(array, x => x)).toBe(499999);

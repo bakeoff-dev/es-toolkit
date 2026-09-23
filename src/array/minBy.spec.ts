@@ -41,6 +41,11 @@ describe('minBy', () => {
     expect(minBy([3, 1, 2, Number.NaN], x => x)).toBeNaN();
   });
 
+  it('should compare string values', () => {
+    const items = [{ value: 'b' }, { value: 'a' }];
+    expect(minBy(items, item => item.value)).toBe(items[1]);
+  });
+
   it('should provide index parameter to getValue function', () => {
     const items = [{ value: 10 }, { value: 20 }, { value: 15 }];
     const result = minBy(items, (item, index) => item.value + index);
