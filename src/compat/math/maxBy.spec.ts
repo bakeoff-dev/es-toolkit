@@ -52,4 +52,14 @@ describe('maxBy', () => {
 
     expect(maxBy(numbers)).toBe(3);
   });
+
+  it('should support string comparison with shorthand property', () => {
+    const items = [{ v: 'a' }, { v: 'c' }, { v: 'b' }];
+    expect(maxBy(items, 'v')).toEqual({ v: 'c' });
+  });
+
+  it('should compare non-numeric values like strings correctly', () => {
+    const items = [{ v: 'a' }, { v: 'b' }];
+    expect(maxBy(items, o => o.v)).toEqual({ v: 'b' });
+  });
 });

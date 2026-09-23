@@ -52,4 +52,14 @@ describe('minBy', () => {
     const result = minBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 10 });
   });
+
+  it('should compare non-numeric values like strings correctly', () => {
+    const items = [{ v: 'b' }, { v: 'a' }, { v: 'c' }];
+    expect(minBy(items, o => o.v as unknown as number)).toEqual({ v: 'a' });
+  });
+
+  it('should skip null and undefined values', () => {
+    const items = [{ v: undefined }, { v: 2 }, { v: null }, { v: 1 }];
+    expect(minBy(items, o => o.v as unknown as number)).toEqual({ v: 1 });
+  });
 });

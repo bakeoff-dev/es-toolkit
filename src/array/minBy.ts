@@ -80,7 +80,7 @@ export function minBy<T>(
   }
 
   let minElement = items[0];
-  let min = Infinity;
+  let min: number | undefined = undefined;
 
   for (let i = 0; i < items.length; i++) {
     const element = items[i];
@@ -90,7 +90,11 @@ export function minBy<T>(
       return element;
     }
 
-    if (value < min) {
+    if (value == null || typeof value === 'symbol') {
+      continue;
+    }
+
+    if (min === undefined || value < min) {
       min = value;
       minElement = element;
     }

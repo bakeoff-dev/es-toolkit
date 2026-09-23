@@ -80,7 +80,7 @@ export function maxBy<T>(
   }
 
   let maxElement = items[0];
-  let max = -Infinity;
+  let max: number | undefined = undefined;
 
   for (let i = 0; i < items.length; i++) {
     const element = items[i];
@@ -90,7 +90,11 @@ export function maxBy<T>(
       return element;
     }
 
-    if (value > max) {
+    if (value == null || typeof value === 'symbol') {
+      continue;
+    }
+
+    if (max === undefined || value > max) {
       max = value;
       maxElement = element;
     }

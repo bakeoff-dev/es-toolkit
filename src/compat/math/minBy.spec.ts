@@ -52,4 +52,14 @@ describe('minBy', () => {
 
     expect(minBy(numbers)).toBe(1);
   });
+
+  it('should support string comparison with shorthand property', () => {
+    const items = [{ v: 'b' }, { v: 'a' }, { v: 'c' }];
+    expect(minBy(items, 'v')).toEqual({ v: 'a' });
+  });
+
+  it('should compare non-numeric values like strings correctly', () => {
+    const items = [{ v: 'b' }, { v: 'a' }];
+    expect(minBy(items, o => o.v)).toEqual({ v: 'a' });
+  });
 });
