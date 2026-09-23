@@ -52,4 +52,9 @@ describe('maxBy', () => {
 
     expect(maxBy(numbers)).toBe(3);
   });
+
+  it('should compare non-numeric values such as strings', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'b' });
+  });
 });

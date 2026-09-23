@@ -52,4 +52,9 @@ describe('maxBy', () => {
     const result = maxBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 20 });
   });
+
+  it('should compare non-numeric values such as strings', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], o => o.v as unknown as number)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'b' }, { v: 'a' }], o => o.v as unknown as number)).toEqual({ v: 'b' });
+  });
 });
