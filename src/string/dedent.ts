@@ -56,12 +56,12 @@ export function dedent(
     default: {
       assertTemplateShape(str);
 
-      let text = str[0];
+      const parts = dedentTemplateStringsArray(str);
+      let text = parts[0];
       for (let i = 0; i < values.length; i++) {
-        text += String(values[i]) + str[i + 1];
+        text += String(values[i]) + parts[i + 1];
       }
-
-      return dedentImpl(text);
+      return text;
     }
   }
 }
@@ -69,9 +69,15 @@ export function dedent(
 function dedentTemplateStringsArray(strings: TemplateStringsArray): TemplateStringsArray {
   assertTemplateShape(strings);
 
-  const joined = strings.join('\x00');
+  // Use a marker that cannot occur in the template's static text. Interpolated
+  // values must not contribute lines to the indentation calculation.
+  let marker = '\x00';
+  while (strings.some(part => part.includes(marker))) {
+    marker += '\x00';
+  }
+  const joined = strings.join(marker);
   const dedented = dedentImpl(joined);
-  const parts = dedented.split('\x00');
+  const parts = dedented.split(marker);
 
   return Object.assign(parts, { raw: parts }) as unknown as TemplateStringsArray;
 }

@@ -35,6 +35,29 @@ describe('dedent', () => {
     expect(result).toBe('hello\nworld');
   });
 
+  it('should ignore line breaks inside interpolated values when finding indentation', () => {
+    const value = 'a\nb';
+    expect(dedent`
+      hello ${value}
+      world
+    `).toBe('hello a\nb\nworld');
+  });
+
+  it('should count the indentation of a line that starts with an interpolation', () => {
+    expect(dedent`
+      hello
+        ${'x'}
+    `).toBe('hello\n  x');
+  });
+
+  it('should preserve null bytes in static text and interpolated values', () => {
+    const value = 'a\x00b\nc';
+    expect(dedent`
+      hello\x00 ${value}
+      world
+    `).toBe('hello\x00 a\x00b\nc\nworld');
+  });
+
   it('should handle empty lines', () => {
     const result = dedent`
       hello
@@ -169,6 +192,22 @@ describe('dedent', () => {
       ${name}!
     `;
     expect(result).toBe('Welcome to\nes-toolkit!');
+  });
+
+  it('should ignore multiline interpolations when composing with another tag function', () => {
+    const identity = (strings: TemplateStringsArray, ...values: unknown[]) => {
+      let result = '';
+      for (let i = 0; i < strings.length; i++) {
+        result += strings[i];
+        if (i < values.length) result += String(values[i]);
+      }
+      return result;
+    };
+    const wrapped = dedent(identity);
+    expect(wrapped`
+      hello ${'a\nb'}
+      world
+    `).toBe('hello a\nb\nworld');
   });
 
   it('should throw a TypeError from a composed tag function if the template shape is invalid', () => {
