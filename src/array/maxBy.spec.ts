@@ -52,4 +52,19 @@ describe('maxBy', () => {
     const result = maxBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 20 });
   });
+
+  it('should compare non-numeric values with `>` instead of falling back to the first element', () => {
+    const versions = [{ version: 'a' }, { version: 'c' }, { version: 'b' }];
+    // @ts-expect-error -- the public signature is numeric, but the runtime compares values with `>`
+    expect(maxBy(versions, item => item.version)).toEqual({ version: 'c' });
+    // @ts-expect-error -- the public signature is numeric, but the runtime compares values with `>`
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], item => item.v)).toEqual({ v: 'b' });
+  });
+
+  it('should work with values below the previous -Infinity seed', () => {
+    const past = new Date(0);
+    const future = new Date(1000);
+    expect(maxBy([past, future], date => date.getTime())).toBe(future);
+    expect(maxBy([{ a: -Infinity }, { a: -1 }], item => item.a)).toEqual({ a: -1 });
+  });
 });

@@ -52,4 +52,11 @@ describe('maxBy', () => {
 
     expect(maxBy(numbers)).toBe(3);
   });
+
+  it('should compare string values like Lodash', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy(['a', 'c', 'b'])).toBe('c');
+    expect(maxBy([{ version: '1.2.0' }, { version: '1.10.0' }], 'version')).toEqual({ version: '1.2.0' });
+  });
 });

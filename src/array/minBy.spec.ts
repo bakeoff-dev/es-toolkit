@@ -52,4 +52,19 @@ describe('minBy', () => {
     const result = minBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 10 });
   });
+
+  it('should compare non-numeric values with `<` instead of falling back to the first element', () => {
+    const versions = [{ version: 'c' }, { version: 'a' }, { version: 'b' }];
+    // @ts-expect-error -- the public signature is numeric, but the runtime compares values with `<`
+    expect(minBy(versions, item => item.version)).toEqual({ version: 'a' });
+    // @ts-expect-error -- the public signature is numeric, but the runtime compares values with `<`
+    expect(minBy([{ v: 'b' }, { v: 'a' }], item => item.v)).toEqual({ v: 'a' });
+  });
+
+  it('should work with values above the previous Infinity seed', () => {
+    const past = new Date(0);
+    const future = new Date(1000);
+    expect(minBy([future, past], date => date.getTime())).toBe(past);
+    expect(minBy([{ a: Infinity }, { a: 1 }], item => item.a)).toEqual({ a: 1 });
+  });
 });
