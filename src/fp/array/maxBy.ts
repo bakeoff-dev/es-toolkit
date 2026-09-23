@@ -17,7 +17,7 @@ import { maxBy as maxByToolkit } from '../../array/maxBy.ts';
  * // => { score: 20 }
  */
 export function maxBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly [T, ...T[]]) => T;
 
 /**
@@ -37,10 +37,10 @@ export function maxBy<T>(
  * // => undefined
  */
 export function maxBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly T[]) => T | undefined;
 export function maxBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly T[]) => T | undefined {
   return function (array: readonly T[]): T | undefined {
     return maxByToolkit(array, getValue);

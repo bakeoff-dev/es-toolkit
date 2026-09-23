@@ -21,7 +21,7 @@
  */
 export function maxBy<T>(
   items: readonly [T, ...T[]],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): T;
 /**
  * Finds the element in an array that has the maximum value when applying
@@ -47,7 +47,7 @@ export function maxBy<T>(
  */
 export function maxBy<T>(
   items: readonly T[],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): T | undefined;
 /**
  * Finds the element in an array that has the maximum value when applying
@@ -73,26 +73,32 @@ export function maxBy<T>(
  */
 export function maxBy<T>(
   items: readonly T[],
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): T | undefined {
   if (items.length === 0) {
     return undefined;
   }
 
   let maxElement = items[0];
-  let max = -Infinity;
+  let max: any = undefined;
+  let hasValue = false;
 
   for (let i = 0; i < items.length; i++) {
     const element = items[i];
     const value = getValue(element, i, items);
 
+    if (value == null || typeof value === 'symbol') {
+      continue;
+    }
+
     if (Number.isNaN(value)) {
       return element;
     }
 
-    if (value > max) {
+    if (!hasValue || value > max) {
       max = value;
       maxElement = element;
+      hasValue = true;
     }
   }
 

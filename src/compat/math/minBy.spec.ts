@@ -52,4 +52,15 @@ describe('minBy', () => {
 
     expect(minBy(numbers)).toBe(1);
   });
+
+  it('should work with non-numeric comparable values such as strings', () => {
+    expect(minBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: 'a' }, { v: 'b' }], 'v')).toEqual({ v: 'a' });
+  });
+
+  it('should skip null and undefined values in the array', () => {
+    expect(minBy([{ v: 'a' }, { v: null }, { v: 'b' }], 'v')).toEqual({ v: 'a' });
+    expect(minBy([{ v: undefined }, { v: 'a' }], 'v')).toEqual({ v: 'a' });
+  });
 });

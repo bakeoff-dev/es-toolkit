@@ -52,4 +52,15 @@ describe('maxBy', () => {
 
     expect(maxBy(numbers)).toBe(3);
   });
+
+  it('should work with non-numeric comparable values such as strings', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], 'v')).toEqual({ v: 'b' });
+  });
+
+  it('should skip null and undefined values in the array', () => {
+    expect(maxBy([{ v: 'a' }, { v: null }, { v: 'b' }], 'v')).toEqual({ v: 'b' });
+    expect(maxBy([{ v: undefined }, { v: 'a' }], 'v')).toEqual({ v: 'a' });
+  });
 });

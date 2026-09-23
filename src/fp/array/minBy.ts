@@ -17,7 +17,7 @@ import { minBy as minByToolkit } from '../../array/minBy.ts';
  * // => { score: 10 }
  */
 export function minBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly [T, ...T[]]) => T;
 
 /**
@@ -37,10 +37,10 @@ export function minBy<T>(
  * // => undefined
  */
 export function minBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly T[]) => T | undefined;
 export function minBy<T>(
-  getValue: (element: T, index: number, array: readonly T[]) => number
+  getValue: (element: T, index: number, array: readonly T[]) => any
 ): (array: readonly T[]) => T | undefined {
   return function (array: readonly T[]): T | undefined {
     return minByToolkit(array, getValue);

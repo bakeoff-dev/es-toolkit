@@ -52,4 +52,18 @@ describe('minBy', () => {
     const result = minBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 10 });
   });
+
+  it('should work with non-numeric comparable values such as strings and dates', () => {
+    expect(minBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'a' });
+
+    const now = new Date();
+    const past = new Date(0);
+    expect(minBy([{ d: past }, { d: now }], o => o.d)).toEqual({ d: past });
+  });
+
+  it('should skip null and undefined values', () => {
+    expect(minBy([{ v: 'a' }, { v: null }, { v: 'b' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: undefined }, { v: 'a' }], o => o.v)).toEqual({ v: 'a' });
+  });
 });

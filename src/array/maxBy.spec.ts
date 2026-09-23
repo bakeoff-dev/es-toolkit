@@ -52,4 +52,18 @@ describe('maxBy', () => {
     const result = maxBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 20 });
   });
+
+  it('should work with non-numeric comparable values such as strings and dates', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'b' });
+
+    const now = new Date();
+    const past = new Date(0);
+    expect(maxBy([{ d: past }, { d: now }], o => o.d)).toEqual({ d: now });
+  });
+
+  it('should skip null and undefined values', () => {
+    expect(maxBy([{ v: 'a' }, { v: null }, { v: 'b' }], o => o.v)).toEqual({ v: 'b' });
+    expect(maxBy([{ v: undefined }, { v: 'a' }], o => o.v)).toEqual({ v: 'a' });
+  });
 });
