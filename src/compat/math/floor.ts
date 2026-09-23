@@ -3,6 +3,10 @@ import { decimalAdjust } from '../_internal/decimalAdjust.ts';
 /**
  * Computes number rounded down to precision.
  *
+ * `number` is coerced to a number and `precision` to an integer, so values such as
+ * `'4.016'`, `true` or `[2]` are accepted. Symbols coerce to `NaN`, and `precision`
+ * is capped at `292`.
+ *
  * @param number The number to round down.
  * @param precision The precision to round down to.
  * @returns Returns the rounded down number.

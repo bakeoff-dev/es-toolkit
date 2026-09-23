@@ -57,6 +57,8 @@ floor(-6.994, 2);
 - `number` (`number`): The number to round down.
 - `precision` (`number`, optional): The number of decimal places to round down to. Defaults to `0`.
 
+Both arguments are coerced the way Lodash coerces them: `number` is converted to a number and `precision` to an integer. So `floor('4.016', '2')` works, symbols become `NaN`, `true` counts as a precision of `1`, and a `precision` above `292` is capped at `292`.
+
 #### Returns
 
 (`number`): Returns the number rounded down to the specified decimal places.

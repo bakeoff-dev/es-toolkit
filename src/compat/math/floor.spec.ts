@@ -85,4 +85,59 @@ describe('floor', () => {
     expect(floor(5e-324, 323)).toBe(0);
     expect(floor(5e-324, -323)).toBe(0);
   });
+
+  it(`\`floor\` should coerce \`precision\` the same way lodash does`, () => {
+    const symbol = Symbol('a');
+    const cases: Array<[unknown, number]> = [
+      [true, 4],
+      [false, 4],
+      [Infinity, 4.016],
+      [[1, 2, 3], 4],
+      [[2], 4.01],
+      ['1e3', 4.016],
+      ['2px', 4],
+      ['0x2', 4.01],
+      ['-0x2', 4],
+      [null, 4],
+      [undefined, 4],
+      [NaN, 4],
+      [' 2 ', 4.01],
+      [{ valueOf: () => 2 }, 4.01],
+      [symbol, 4],
+      ['3.7', 4.016],
+      [-1.5, 0],
+    ];
+
+    for (const [precision, expected] of cases) {
+      expect(floor(4.016, precision as number)).toBe(expected);
+    }
+  });
+
+  it(`\`floor\` should coerce \`number\` the same way lodash does`, () => {
+    const symbol = Symbol('a');
+    const cases: Array<[unknown, number, number]> = [
+      ['4.016', 4, 4.01],
+      [' 4.016 ', 4, 4.01],
+      ['0x20', 32, 32],
+      ['0b101', 5, 5],
+      ['0o17', 15, 15],
+      ['-0x2', NaN, NaN],
+      [true, 1, 1],
+      [false, 0, 0],
+      [null, 0, 0],
+      [undefined, NaN, NaN],
+      ['', 0, 0],
+      [' ', 0, 0],
+      [[4.6], 4, 4.6],
+      [[], 0, 0],
+      [{ valueOf: () => 4.6 }, 4, 4.6],
+      [symbol, NaN, NaN],
+      ['5e1', 50, 50],
+    ];
+
+    for (const [value, expected, expectedWithPrecision] of cases) {
+      expect(floor(value as number)).toBe(expected);
+      expect(floor(value as number, 2)).toBe(expectedWithPrecision);
+    }
+  });
 });

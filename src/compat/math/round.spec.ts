@@ -91,4 +91,59 @@ describe('round', () => {
     expect(round(5e-324, 323)).toBe(0);
     expect(round(5e-324, -323)).toBe(0);
   });
+
+  it(`\`round\` should coerce \`precision\` the same way lodash does`, () => {
+    const symbol = Symbol('a');
+    const cases: Array<[unknown, number]> = [
+      [true, 4],
+      [false, 4],
+      [Infinity, 4.016],
+      [[1, 2, 3], 4],
+      [[2], 4.02],
+      ['1e3', 4.016],
+      ['2px', 4],
+      ['0x2', 4.02],
+      ['-0x2', 4],
+      [null, 4],
+      [undefined, 4],
+      [NaN, 4],
+      [' 2 ', 4.02],
+      [{ valueOf: () => 2 }, 4.02],
+      [symbol, 4],
+      ['3.7', 4.016],
+      [-1.5, 0],
+    ];
+
+    for (const [precision, expected] of cases) {
+      expect(round(4.016, precision as number)).toBe(expected);
+    }
+  });
+
+  it(`\`round\` should coerce \`number\` the same way lodash does`, () => {
+    const symbol = Symbol('a');
+    const cases: Array<[unknown, number, number]> = [
+      ['4.016', 4, 4.02],
+      [' 4.016 ', 4, 4.02],
+      ['0x20', 32, 32],
+      ['0b101', 5, 5],
+      ['0o17', 15, 15],
+      ['-0x2', NaN, NaN],
+      [true, 1, 1],
+      [false, 0, 0],
+      [null, 0, 0],
+      [undefined, NaN, NaN],
+      ['', 0, 0],
+      [' ', 0, 0],
+      [[4.6], 5, 4.6],
+      [[], 0, 0],
+      [{ valueOf: () => 4.6 }, 5, 4.6],
+      [symbol, NaN, NaN],
+      ['5e1', 50, 50],
+    ];
+
+    for (const [value, expected, expectedWithPrecision] of cases) {
+      expect(round(value as number)).toBe(expected);
+      expect(round(value as number, 2)).toBe(expectedWithPrecision);
+    }
+  });
 });
