@@ -53,6 +53,22 @@ logOnce('もう一度こんにちは'); // 出力されない(すでに呼び出
 logOnce('またこんにちは'); // 出力されない(すでに呼び出し済み)
 ```
 
+返される関数は呼び出し元の `this` をそのまま使うため、オブジェクトのメソッドとしても使用できます。
+
+```typescript
+import { once } from 'es-toolkit/function';
+
+const counter = {
+  count: 0,
+  increment: once(function (this: { count: number }) {
+    return ++this.count;
+  }),
+};
+
+counter.increment(); // => 1
+counter.increment(); // => 1 (すでに呼び出し済み)
+```
+
 #### パラメータ
 
 - `func` (`F`): 一度だけ呼び出されるように制限する関数です。

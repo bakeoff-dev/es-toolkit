@@ -53,6 +53,22 @@ logOnce('다시 안녕하세요'); // 출력되지 않음 (이미 호출됨)
 logOnce('또 안녕하세요'); // 출력되지 않음 (이미 호출됨)
 ```
 
+반환된 함수는 호출한 쪽의 `this`를 그대로 사용하기 때문에, 객체의 메서드로도 사용할 수 있어요.
+
+```typescript
+import { once } from 'es-toolkit/function';
+
+const counter = {
+  count: 0,
+  increment: once(function (this: { count: number }) {
+    return ++this.count;
+  }),
+};
+
+counter.increment(); // => 1
+counter.increment(); // => 1 (이미 호출됨)
+```
+
 #### 파라미터
 
 - `func` (`F`): 한 번만 호출되도록 제한할 함수예요.

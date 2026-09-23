@@ -22,6 +22,18 @@ describe('once', () => {
     expect(count).toBe(1);
   });
 
+  it('should use the `this` binding of the created function', () => {
+    const object = {
+      value: 42,
+      getValue: once(function (this: { value: number }) {
+        return this.value;
+      }),
+    };
+
+    expect(object.getValue()).toBe(42);
+    expect(object.getValue()).toBe(42);
+  });
+
   it('should not throw more than once', () => {
     const resultFunc = once(() => {
       throw new Error();

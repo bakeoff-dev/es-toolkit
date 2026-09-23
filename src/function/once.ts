@@ -1,6 +1,8 @@
 /**
  * Creates a function that is restricted to invoking func once. Repeat calls to the function return the value of the first invocation.
  *
+ * `func` is invoked with the `this` binding and arguments of the created function.
+ *
  * @template F - The type of the function.
  * @param func - The function to restrict.
  * @returns Returns the new restricted function.
@@ -18,6 +20,8 @@ export function once<F extends (...args: any[]) => any>(func: F): F;
  * Creates a function that is restricted to invoking the provided function `func` once.
  * Repeated calls to the function will return the value from the first invocation.
  *
+ * `func` is invoked with the `this` binding and arguments of the created function.
+ *
  * @template F - The type of function.
  * @param func - The function to restrict.
  * @returns A new function that invokes `func` once and caches the result.
@@ -30,15 +34,26 @@ export function once<F extends (...args: any[]) => any>(func: F): F;
  *
  * initialize(); // Logs: 'Initialized!' and returns true
  * initialize(); // Returns true without logging
+ *
+ * @example
+ * const counter = {
+ *   count: 0,
+ *   increment: once(function (this: { count: number }) {
+ *     return ++this.count;
+ *   }),
+ * };
+ *
+ * counter.increment(); // => 1
+ * counter.increment(); // => 1
  */
 export function once<F extends (() => any) | ((...args: any[]) => void)>(func: F): F {
   let called = false;
   let cache: ReturnType<F>;
 
-  return function (...args: Parameters<F>): ReturnType<F> {
+  return function (this: unknown, ...args: Parameters<F>): ReturnType<F> {
     if (!called) {
       called = true;
-      cache = func(...args);
+      cache = func.apply(this, args);
     }
 
     return cache;
