@@ -8,6 +8,8 @@ Released on June 26th, 2026.
   documentation, benchmarks, and bundle-size checks. ([#1781])
 - Added a broad set of array utilities to `es-toolkit/fp`, covering slicing,
   grouping, set operations, ordering, zipping, and collection helpers. ([#1801])
+- Fixed `maxBy` and `minBy` to compare non-numeric iteratee values such as
+  strings, restoring v1.47.0 behavior and Lodash parity in `es-toolkit/compat`.
 - Fixed `trimStart` to validate multi-character trim strings correctly before
   it stops trimming. ([#1615])
 - Fixed `compat/pick` to prefer a literal key over a dot-notation path when the
