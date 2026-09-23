@@ -54,14 +54,14 @@ export function dedent(
       return dedentImpl(str);
     }
     default: {
-      assertTemplateShape(str);
+      const dedentedStrings = dedentTemplateStringsArray(str);
 
-      let text = str[0];
+      let text = dedentedStrings[0];
       for (let i = 0; i < values.length; i++) {
-        text += String(values[i]) + str[i + 1];
+        text += String(values[i]) + dedentedStrings[i + 1];
       }
 
-      return dedentImpl(text);
+      return text;
     }
   }
 }

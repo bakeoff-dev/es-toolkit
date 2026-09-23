@@ -171,6 +171,53 @@ describe('dedent', () => {
     expect(result).toBe('Welcome to\nes-toolkit!');
   });
 
+  it('should not let multi-line interpolated values affect template indentation', () => {
+    const value = 'a\nb';
+    const result = dedent`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
+  it('should preserve indentation on a line that starts with an interpolation', () => {
+    const result = dedent`
+      hello
+        ${'x'}
+    `;
+    expect(result).toBe('hello\n  x');
+  });
+
+  it('should not let multi-line interpolated values affect indentation when composed with a tag function', () => {
+    const identity = (strings: TemplateStringsArray, ...values: unknown[]) => {
+      let result = '';
+      for (let i = 0; i < strings.length; i++) {
+        result += strings[i];
+        if (i < values.length) {
+          result += String(values[i]);
+        }
+      }
+      return result;
+    };
+
+    const dedentedIdentity = dedent(identity);
+    const value = 'a\nb';
+    const result = dedentedIdentity`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
+  it('should handle interpolated values containing null characters', () => {
+    const value = 'a\x00b';
+    const result = dedent`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\x00b\nworld');
+  });
+
   it('should throw a TypeError from a composed tag function if the template shape is invalid', () => {
     const identity = (strings: TemplateStringsArray) => strings.join('');
     const dedentedIdentity = dedent(identity);
