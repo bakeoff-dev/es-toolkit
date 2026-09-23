@@ -52,4 +52,27 @@ describe('maxBy', () => {
 
     expect(maxBy(numbers)).toBe(3);
   });
+  it('should work with string values, matching lodash', () => {
+    expect(maxBy([{ v: 'a' }, { v: 'b' }, { v: 'c' }], o => o.v)).toEqual({ v: 'c' });
+    expect(maxBy([{ v: 'c' }, { v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'c' });
+    expect(maxBy(['1.2.0', '1.10.0', '1.9.0'], v => v)).toBe('1.9.0');
+  });
+
+  it('should work with string values and `_.property` shorthands', () => {
+    const objects = [{ v: 'a' }, { v: 'c' }, { v: 'b' }];
+    expect(maxBy(objects, 'v')).toBe(objects[1]);
+  });
+
+  it('should work with boolean values, matching lodash', () => {
+    expect(maxBy([{ v: false }, { v: true }], o => o.v)).toEqual({ v: true });
+  });
+
+  it('should return the first element among equal string values', () => {
+    const objects = [
+      { i: 1, v: 'b' },
+      { i: 2, v: 'b' },
+      { i: 3, v: 'a' },
+    ];
+    expect(maxBy(objects, o => o.v)).toBe(objects[0]);
+  });
 });

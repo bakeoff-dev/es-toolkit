@@ -52,4 +52,31 @@ describe('maxBy', () => {
     const result = maxBy(items, (item, _index, array) => item.value * array.length);
     expect(result).toEqual({ value: 20 });
   });
+  it('should compare non-numeric values with `>` instead of falling back to the first element', () => {
+    const versions = [{ version: 'a' }, { version: 'c' }, { version: 'b' }];
+
+    // The type signature documents numeric values, but comparison is relational,
+    // so any value comparable with `>` works at runtime.
+    const getVersion = (item: { version: string }) => item.version as unknown as number;
+
+    expect(maxBy(versions, getVersion)).toEqual({ version: 'c' });
+    expect(maxBy([{ version: 'b' }, { version: 'a' }], getVersion)).toEqual({ version: 'b' });
+  });
+
+  it('should return the first element among equal non-numeric values', () => {
+    const items = [
+      { id: 1, name: 'b' },
+      { id: 2, name: 'b' },
+      { id: 3, name: 'a' },
+    ];
+
+    const result = maxBy(items, item => item.name as unknown as number);
+
+    expect(result).toBe(items[0]);
+  });
+
+  it('should work with values that are all below zero', () => {
+    expect(maxBy([-3, -1, -2], x => x)).toBe(-1);
+    expect(maxBy([{ a: -Infinity }, { a: -5 }], x => x.a)).toEqual({ a: -5 });
+  });
 });

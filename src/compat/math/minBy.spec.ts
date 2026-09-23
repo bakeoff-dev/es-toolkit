@@ -52,4 +52,27 @@ describe('minBy', () => {
 
     expect(minBy(numbers)).toBe(1);
   });
+  it('should work with string values, matching lodash', () => {
+    expect(minBy([{ v: 'b' }, { v: 'a' }, { v: 'c' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: 'a' }, { v: 'b' }, { v: 'c' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy(['1.2.0', '1.10.0', '1.9.0'], v => v)).toBe('1.10.0');
+  });
+
+  it('should work with string values and `_.property` shorthands', () => {
+    const objects = [{ v: 'b' }, { v: 'a' }, { v: 'c' }];
+    expect(minBy(objects, 'v')).toBe(objects[1]);
+  });
+
+  it('should work with boolean values, matching lodash', () => {
+    expect(minBy([{ v: true }, { v: false }], o => o.v)).toEqual({ v: false });
+  });
+
+  it('should return the first element among equal string values', () => {
+    const objects = [
+      { i: 1, v: 'a' },
+      { i: 2, v: 'a' },
+      { i: 3, v: 'b' },
+    ];
+    expect(minBy(objects, o => o.v)).toBe(objects[0]);
+  });
 });
