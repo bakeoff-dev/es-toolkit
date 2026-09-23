@@ -52,4 +52,9 @@ describe('minBy', () => {
 
     expect(minBy(numbers)).toBe(1);
   });
+
+  it('should compare string values correctly', () => {
+    expect(minBy([{ v: 'b' }, { v: 'a' }], o => o.v)).toEqual({ v: 'a' });
+    expect(minBy([{ v: 'a' }, { v: 'b' }], o => o.v)).toEqual({ v: 'a' });
+  });
 });
