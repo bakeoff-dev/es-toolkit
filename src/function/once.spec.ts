@@ -32,4 +32,15 @@ describe('once', () => {
     expect(onceFunc()).toBeUndefined();
     expect(func).toHaveBeenCalledTimes(1);
   });
+
+  it('should preserve the `this` context', () => {
+    const obj = {
+      value: 42,
+      getValue: once(function (this: { value: number }) {
+        return this?.value;
+      }),
+    };
+
+    expect(obj.getValue()).toBe(42);
+  });
 });
