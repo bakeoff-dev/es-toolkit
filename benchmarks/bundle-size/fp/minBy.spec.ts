@@ -5,6 +5,6 @@ describe('fp/minBy bundle size', () => {
   it('es-toolkit/fp', async () => {
     expect(
       await getBundleSizeFromScript('import { minBy } from "es-toolkit/fp"; console.log(minBy)')
-    ).toMatchInlineSnapshot(`233`);
+    ).toMatchInlineSnapshot(`281`);
   });
 });
