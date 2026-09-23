@@ -29,6 +29,7 @@ edge cases now matches Lodash, so results may differ if you relied on the previo
 - Fixed `compat/differenceWith` and `compat/without` to normalize `-0` to `0`. ([#2049])
 - Fixed `compat/findLastIndex` to convert `fromIndex` to an integer. ([#2047])
 - Fixed `compat/xorWith` to match Lodash when no comparator is given. ([#2057])
+- Fixed `compat/once` to preserve the wrapped function's `this` context, matching Lodash.
 
 - Covered the new iterator entrypoints in the dist and browser compatibility
   checks. ([#2030])
