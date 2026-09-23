@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { minBy } from './minBy';
 
 describe('minBy', () => {
+  it('should compare string values', () => {
+    const items = [{ v: 'b' }, { v: 'a' }];
+    expect(minBy(items, item => item.v as any)).toBe(items[1]);
+  });
   it('minBy selects one min value in array', () => {
     const people = [
       { name: 'Mark', age: 30 },

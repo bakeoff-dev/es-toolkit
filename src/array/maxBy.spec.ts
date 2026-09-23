@@ -28,6 +28,11 @@ describe('maxBy', () => {
     expect(result).toEqual({ name: 'Mark', age: 25 });
   });
 
+  it('should compare string values', () => {
+    const items = [{ v: 'a' }, { v: 'b' }];
+    expect(maxBy(items, item => item.v as any)).toBe(items[1]);
+  });
+
   it('if array is empty, return undefined', () => {
     type Person = { name: string; age: number };
     const people: Person[] = [];

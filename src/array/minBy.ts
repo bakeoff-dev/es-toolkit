@@ -80,9 +80,13 @@ export function minBy<T>(
   }
 
   let minElement = items[0];
-  let min = Infinity;
+  let min = getValue(minElement, 0, items);
 
-  for (let i = 0; i < items.length; i++) {
+  if (Number.isNaN(min)) {
+    return minElement;
+  }
+
+  for (let i = 1; i < items.length; i++) {
     const element = items[i];
     const value = getValue(element, i, items);
 
