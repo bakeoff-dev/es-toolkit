@@ -53,6 +53,22 @@ logOnce('再次你好'); // 不输出 (已经调用过)
 logOnce('又是你好'); // 不输出 (已经调用过)
 ```
 
+返回的函数的 `this` 会被原样传递,因此也可以作为对象的方法使用。
+
+```typescript
+import { once } from 'es-toolkit/function';
+
+const counter = {
+  value: 42,
+  getValue: once(function (this: { value: number }) {
+    return this.value;
+  }),
+};
+
+counter.getValue(); // => 42
+counter.getValue(); // => 42 (缓存的值)
+```
+
 #### 参数
 
 - `func` (`F`): 要限制为只调用一次的函数。

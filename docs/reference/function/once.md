@@ -53,6 +53,22 @@ logOnce('Hello again'); // Not logged (already called)
 logOnce('Hello once more'); // Not logged (already called)
 ```
 
+The function is invoked with the `this` binding of the returned function, so it works as an object method as well.
+
+```typescript
+import { once } from 'es-toolkit/function';
+
+const counter = {
+  value: 42,
+  getValue: once(function (this: { value: number }) {
+    return this.value;
+  }),
+};
+
+counter.getValue(); // => 42
+counter.getValue(); // => 42 (cached)
+```
+
 #### Parameters
 
 - `func` (`F`): The function to restrict to a single execution.

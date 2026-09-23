@@ -32,4 +32,16 @@ describe('once', () => {
     expect(onceFunc()).toBeUndefined();
     expect(func).toHaveBeenCalledTimes(1);
   });
+
+  it('should preserve the `this` binding', () => {
+    const counter = {
+      value: 42,
+      getValue: once(function (this: { value: number }) {
+        return this.value;
+      }),
+    };
+
+    expect(counter.getValue()).toBe(42);
+    expect(counter.getValue()).toBe(42);
+  });
 });
