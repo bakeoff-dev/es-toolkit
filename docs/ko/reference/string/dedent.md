@@ -15,7 +15,7 @@ const text = dedent`
 
 ### `` dedent`text` ``
 
-들여쓰기된 코드 안에서 여러 줄 문자열을 작성하고 싶을 때, `dedent`를 태그드 템플릿 리터럴로 사용하세요. 비어 있지 않은 줄들이 공통으로 가진 가장 작은 들여쓰기를 찾아서 모든 줄에서 제거하기 때문에, 줄 사이의 상대적인 들여쓰기 차이는 유지돼요. 첫 줄과 마지막 줄은 제거돼요.
+들여쓰기된 코드 안에서 여러 줄 문자열을 작성하고 싶을 때, `dedent`를 태그드 템플릿 리터럴로 사용하세요. 비어 있지 않은 줄들이 공통으로 가진 가장 작은 들여쓰기를 찾아서 모든 줄에서 제거하기 때문에, 줄 사이의 상대적인 들여쓰기 차이는 유지돼요. 첫 줄과 마지막 줄은 제거돼요. 삽입된 값은 들여쓰기를 제거한 뒤에 채워지기 때문에, 얼마나 제거할지는 템플릿에 직접 쓴 내용만으로 정해져요.
 
 ```typescript
 import { dedent } from 'es-toolkit/string';
@@ -35,12 +35,20 @@ const list = dedent`
 `;
 // list는 'Items:\n  - First\n  - Second'가 돼요
 
-// 삽입된 값은 들여쓰기를 제거하기 전에 채워져요
+// 삽입된 값은 들여쓰기를 제거한 뒤에 채워져요
 const name = 'es-toolkit';
 const greeting = dedent`
   Hello, ${name}!
 `;
 // greeting은 'Hello, es-toolkit!'이 돼요
+
+// 줄바꿈이 들어 있는 값을 넣어도, 제거되는 들여쓰기는 달라지지 않아요
+const value = 'a\nb';
+const text = dedent`
+  hello ${value}
+  world
+`;
+// text는 'hello a\nb\nworld'가 돼요
 ```
 
 공백만 있는 줄은 빈 줄이 되고, Windows 줄바꿈(`\r\n`)은 `\n`으로 정규화돼요.

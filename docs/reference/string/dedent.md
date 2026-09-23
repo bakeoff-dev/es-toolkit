@@ -15,7 +15,7 @@ const text = dedent`
 
 ### `` dedent`text` ``
 
-Use `dedent` as a tagged template literal to write multi-line strings inside indented code. It finds the smallest indentation shared by the non-empty lines and removes it from every line, so relative indentation differences between lines are preserved. The opening and closing lines are removed.
+Use `dedent` as a tagged template literal to write multi-line strings inside indented code. It finds the smallest indentation shared by the non-empty lines and removes it from every line, so relative indentation differences between lines are preserved. The opening and closing lines are removed. Interpolated values are inserted after the indentation is removed, so only the template's own text decides how much is removed.
 
 ```typescript
 import { dedent } from 'es-toolkit/string';
@@ -35,12 +35,20 @@ const list = dedent`
 `;
 // list is 'Items:\n  - First\n  - Second'
 
-// Interpolated values are inserted before the indentation is removed
+// Interpolated values are inserted after the indentation is removed
 const name = 'es-toolkit';
 const greeting = dedent`
   Hello, ${name}!
 `;
 // greeting is 'Hello, es-toolkit!'
+
+// A value that contains line breaks does not change the indentation that is removed
+const value = 'a\nb';
+const text = dedent`
+  hello ${value}
+  world
+`;
+// text is 'hello a\nb\nworld'
 ```
 
 Lines that contain only whitespace become empty lines, and Windows line endings (`\r\n`) are normalized to `\n`.

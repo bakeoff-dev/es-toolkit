@@ -15,7 +15,7 @@ const text = dedent`
 
 ### `` dedent`text` ``
 
-インデントされたコードの中で複数行の文字列を書きたい時に、タグ付きテンプレートリテラルとして `dedent` を使用してください。空でない行が共通して持つ最小のインデントを見つけてすべての行から削除するため、行同士の相対的なインデントの差は保たれます。最初の行と最後の行は削除されます。
+インデントされたコードの中で複数行の文字列を書きたい時に、タグ付きテンプレートリテラルとして `dedent` を使用してください。空でない行が共通して持つ最小のインデントを見つけてすべての行から削除するため、行同士の相対的なインデントの差は保たれます。最初の行と最後の行は削除されます。補間された値はインデントを削除した後に挿入されるため、どれだけ削除するかはテンプレート自身のテキストだけで決まります。
 
 ```typescript
 import { dedent } from 'es-toolkit/string';
@@ -35,12 +35,20 @@ const list = dedent`
 `;
 // listは'Items:\n  - First\n  - Second'になります
 
-// 補間された値はインデントを削除する前に挿入されます
+// 補間された値はインデントを削除した後に挿入されます
 const name = 'es-toolkit';
 const greeting = dedent`
   Hello, ${name}!
 `;
 // greetingは'Hello, es-toolkit!'になります
+
+// 改行を含む値を挿入しても、削除されるインデントは変わりません
+const value = 'a\nb';
+const text = dedent`
+  hello ${value}
+  world
+`;
+// textは'hello a\nb\nworld'になります
 ```
 
 空白のみの行は空の行になり、Windowsの改行（`\r\n`）は`\n`に正規化されます。

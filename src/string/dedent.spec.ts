@@ -171,6 +171,82 @@ describe('dedent', () => {
     expect(result).toBe('Welcome to\nes-toolkit!');
   });
 
+  it('should not let a multi-line interpolated value affect the indentation that is removed', () => {
+    const value = 'a\nb';
+    const result = dedent`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
+  it('should keep the indentation of a line that starts with an interpolation', () => {
+    const result = dedent`
+      hello
+        ${'x'}
+    `;
+    expect(result).toBe('hello\n  x');
+  });
+
+  it('should use the least indented template line even when an interpolation starts it', () => {
+    const value = 'a\nb';
+    const result = dedent`
+        hello
+      ${value}
+    `;
+    expect(result).toBe('  hello\na\nb');
+  });
+
+  it('should keep the text that follows a multi-line interpolated value on the same line', () => {
+    const value = 'first\nsecond';
+    const result = dedent`
+      start ${value} end
+      tail
+    `;
+    expect(result).toBe('start first\nsecond end\ntail');
+  });
+
+  it('should not let a multi-line interpolated value affect a composed tag function', () => {
+    const identity = (strings: TemplateStringsArray, ...values: unknown[]) => {
+      let result = '';
+      for (let i = 0; i < strings.length; i++) {
+        result += strings[i];
+        if (i < values.length) {
+          result += String(values[i]);
+        }
+      }
+      return result;
+    };
+
+    const dedentedIdentity = dedent(identity);
+    const value = 'a\nb';
+    const result = dedentedIdentity`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
+  it('should handle null characters in template strings and interpolated values', () => {
+    const value = '\x00value\x00';
+    const result = dedent`
+      \x00 ${value}
+      world
+    `;
+    expect(result).toBe('\x00 \x00value\x00\nworld');
+  });
+
+  it('should handle null characters in a composed tag function', () => {
+    const identity = (strings: TemplateStringsArray) => strings.join('|');
+
+    const dedentedIdentity = dedent(identity);
+    const result = dedentedIdentity`
+      \x00hello
+      world\x00
+    `;
+    expect(result).toBe('\x00hello\nworld\x00');
+  });
+
   it('should throw a TypeError from a composed tag function if the template shape is invalid', () => {
     const identity = (strings: TemplateStringsArray) => strings.join('');
     const dedentedIdentity = dedent(identity);

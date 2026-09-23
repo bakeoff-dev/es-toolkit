@@ -15,7 +15,7 @@ const text = dedent`
 
 ### `` dedent`text` ``
 
-当您想在有缩进的代码中书写多行字符串时，请将 `dedent` 用作标签模板字面量。它会找出非空行共同拥有的最小缩进，并从每一行中移除，因此行与行之间的相对缩进差异会被保留。第一行和最后一行会被移除。
+当您想在有缩进的代码中书写多行字符串时，请将 `dedent` 用作标签模板字面量。它会找出非空行共同拥有的最小缩进，并从每一行中移除，因此行与行之间的相对缩进差异会被保留。第一行和最后一行会被移除。插值会在移除缩进之后插入，因此移除多少缩进只由模板自身的文本决定。
 
 ```typescript
 import { dedent } from 'es-toolkit/string';
@@ -35,12 +35,20 @@ const list = dedent`
 `;
 // list 是 'Items:\n  - First\n  - Second'
 
-// 插值会在移除缩进之前插入
+// 插值会在移除缩进之后插入
 const name = 'es-toolkit';
 const greeting = dedent`
   Hello, ${name}!
 `;
 // greeting 是 'Hello, es-toolkit!'
+
+// 即使插入包含换行的值，被移除的缩进也不会改变
+const value = 'a\nb';
+const text = dedent`
+  hello ${value}
+  world
+`;
+// text 是 'hello a\nb\nworld'
 ```
 
 只包含空白的行会变成空行，Windows 换行符（`\r\n`）会被规范化为 `\n`。
