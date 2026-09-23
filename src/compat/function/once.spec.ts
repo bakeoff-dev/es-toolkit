@@ -30,4 +30,15 @@ describe('once', () => {
     expect(resultFunc).toThrow();
     expect(resultFunc).not.toThrow();
   });
+
+  it('should invoke `func` with the correct `this` binding', () => {
+    const object = {
+      value: 42,
+      getValue: once(function (this: { value: number }) {
+        return this?.value;
+      }),
+    };
+
+    expect(object.getValue()).toBe(42);
+  });
 });
