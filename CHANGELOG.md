@@ -28,6 +28,7 @@ edge cases now matches Lodash, so results may differ if you relied on the previo
 - Fixed `compat/has` and `compat/hasIn` to normalize the `-0` path key. ([#2035])
 - Fixed `compat/differenceWith` and `compat/without` to normalize `-0` to `0`. ([#2049])
 - Fixed `compat/findLastIndex` to convert `fromIndex` to an integer. ([#2047])
+- Fixed `compat/ceil`, `compat/floor`, and `compat/round` to coerce values like Lodash.
 - Fixed `compat/xorWith` to match Lodash when no comparator is given. ([#2057])
 
 - Covered the new iterator entrypoints in the dist and browser compatibility

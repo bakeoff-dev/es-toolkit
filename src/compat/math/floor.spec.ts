@@ -43,6 +43,17 @@ describe('floor', () => {
     expect(actual).toBe(expected);
   });
 
+  it(`\`floor\` should match Lodash coercion for number and precision`, () => {
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(floor(4.016, true)).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(floor(4.016, '1e3')).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(floor(4.016, [1, 2, 3])).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(floor(Symbol('a'))).toBeNaN();
+  });
+
   it(`\`floor\` should work with exponential notation and \`precision\``, () => {
     let actual = floor(5e1, 2);
     expect(actual).toEqual(50);

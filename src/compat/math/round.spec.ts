@@ -42,6 +42,17 @@ describe('round', () => {
     expect(actual).toBe(expected);
   });
 
+  it(`\`round\` should match Lodash coercion for number and precision`, () => {
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(round(4.016, true)).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(round(4.016, '1e3')).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(round(4.016, [1, 2, 3])).toBe(4);
+    // @ts-expect-error - Lodash accepts coercible values
+    expect(round(Symbol('a'))).toBeNaN();
+  });
+
   it(`\`round\` should work with exponential notation and \`precision\``, () => {
     let actual = round(5e1, 2);
     expect(actual).toEqual(50);
