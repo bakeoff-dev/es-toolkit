@@ -54,14 +54,14 @@ export function dedent(
       return dedentImpl(str);
     }
     default: {
-      assertTemplateShape(str);
+      const dedentedStrings = dedentTemplateStringsArray(str);
 
-      let text = str[0];
+      let text = dedentedStrings[0];
       for (let i = 0; i < values.length; i++) {
-        text += String(values[i]) + str[i + 1];
+        text += String(values[i]) + dedentedStrings[i + 1];
       }
 
-      return dedentImpl(text);
+      return text;
     }
   }
 }
@@ -69,11 +69,22 @@ export function dedent(
 function dedentTemplateStringsArray(strings: TemplateStringsArray): TemplateStringsArray {
   assertTemplateShape(strings);
 
-  const joined = strings.join('\x00');
-  const dedented = dedentImpl(joined);
-  const parts = dedented.split('\x00');
+  const raw = strings.raw ?? strings;
 
-  return Object.assign(parts, { raw: parts }) as unknown as TemplateStringsArray;
+  let separator = '\x00';
+  while (strings.some(s => s.includes(separator)) || raw.some(s => s.includes(separator))) {
+    separator += '\x00';
+  }
+
+  const joinedCooked = strings.join(separator);
+  const dedentedCooked = dedentImpl(joinedCooked);
+  const partsCooked = dedentedCooked.split(separator);
+
+  const joinedRaw = raw.join(separator);
+  const dedentedRaw = dedentImpl(joinedRaw);
+  const partsRaw = dedentedRaw.split(separator);
+
+  return Object.assign(partsCooked, { raw: partsRaw }) as unknown as TemplateStringsArray;
 }
 
 /**

@@ -35,6 +35,53 @@ describe('dedent', () => {
     expect(result).toBe('hello\nworld');
   });
 
+  it('should handle multi-line interpolations without affecting template dedenting', () => {
+    const value = 'a\nb';
+    const result = dedent`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
+  it('should keep relative indentation of lines starting with interpolation', () => {
+    const result = dedent`
+      hello
+        ${'x'}
+    `;
+    expect(result).toBe('hello\n  x');
+  });
+
+  it('should handle templates and values containing unusual characters like null bytes', () => {
+    const value = 'a\x00b';
+    const result = dedent`
+      hello\x00 ${value}
+      world
+    `;
+    expect(result).toBe('hello\x00 a\x00b\nworld');
+  });
+
+  it('should compose with another tag function and handle multi-line interpolations correctly', () => {
+    const identity = (strings: TemplateStringsArray, ...values: unknown[]) => {
+      let result = '';
+      for (let i = 0; i < strings.length; i++) {
+        result += strings[i];
+        if (i < values.length) {
+          result += String(values[i]);
+        }
+      }
+      return result;
+    };
+
+    const dedentedIdentity = dedent(identity);
+    const value = 'a\nb';
+    const result = dedentedIdentity`
+      hello ${value}
+      world
+    `;
+    expect(result).toBe('hello a\nb\nworld');
+  });
+
   it('should handle empty lines', () => {
     const result = dedent`
       hello
