@@ -42,6 +42,18 @@ describe('round', () => {
     expect(actual).toBe(expected);
   });
 
+  it(`\`round\` should coerce arguments like Lodash`, () => {
+    // @ts-expect-error - Invalid arguments
+    expect(round(4.016, true)).toBe(4);
+    expect(round(4.016, Infinity)).toBe(4.016);
+    // @ts-expect-error - Invalid arguments
+    expect(round(4.016, [1, 2, 3])).toBe(4);
+    // @ts-expect-error - Invalid arguments
+    expect(round(4.016, '1e3')).toBe(4.016);
+    // @ts-expect-error - Invalid arguments
+    expect(round(Symbol('a'))).toBe(NaN);
+  });
+
   it(`\`round\` should work with exponential notation and \`precision\``, () => {
     let actual = round(5e1, 2);
     expect(actual).toEqual(50);

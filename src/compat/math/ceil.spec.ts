@@ -43,6 +43,22 @@ describe('ceil', () => {
     expect(actual).toBe(expected);
   });
 
+  it(`\`ceil\` should coerce arguments like Lodash`, () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(ceil(4.016, true)).toBe(4.1);
+    expect(ceil(4.016, Infinity)).toBe(4.016);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(ceil(4.016, [1, 2, 3])).toBe(5);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(ceil(4.016, '1e3')).toBe(4.016);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(ceil(Symbol('a'))).toBe(NaN);
+  });
+
   it(`\`ceil\` should work with exponential notation and \`precision\``, () => {
     let actual = ceil(5e1, 2);
     expect(actual).toEqual(50);

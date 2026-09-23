@@ -43,6 +43,22 @@ describe('floor', () => {
     expect(actual).toBe(expected);
   });
 
+  it(`\`floor\` should coerce arguments like Lodash`, () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(floor(4.016, true)).toBe(4);
+    expect(floor(4.016, Infinity)).toBe(4.016);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(floor(4.016, [1, 2, 3])).toBe(4);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(floor(4.016, '1e3')).toBe(4.016);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    expect(floor(Symbol('a'))).toBe(NaN);
+  });
+
   it(`\`floor\` should work with exponential notation and \`precision\``, () => {
     let actual = floor(5e1, 2);
     expect(actual).toEqual(50);
